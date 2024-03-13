@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { ThemeContext } from './ThemeProvider';
 import PropTypes from 'prop-types';
+import DeleteButton from './DeleteButton';
+import EditButton from './EditButton';
 
-const UserList = ({ state }) => {
+const UserList = ({ state, searchType, setUsers }) => {
   const { theme } = useContext(ThemeContext);
 
   const bgTheme = theme === 'light' ? 'bg-sky-200' : 'bg-sky-950';
@@ -17,6 +19,8 @@ const UserList = ({ state }) => {
             <h2 className="text-lg font-semibold">{user.login}</h2>
             <a href={user.html_url} className={`${textTheme} hover:underline`}>{user.html_url}</a>
           </div>
+         {searchType === 'array' && <DeleteButton key={user.id} user={user} setUsers={setUsers} />}
+         {searchType === 'array' && <EditButton user={user} users={state.users} setUsers={setUsers} />}
         </div>
       ))}
       {state.error ? `Something went wrong: ${state.error}` : null}
@@ -26,6 +30,8 @@ const UserList = ({ state }) => {
 
 UserList.propTypes = {
   state: PropTypes.object.isRequired,
+  searchType: PropTypes.string.isRequired,
+  setUsers: PropTypes.func.isRequired,
 };
 
 export default UserList;
